@@ -1,32 +1,35 @@
 # Standard
 import os
-import sys
 import json
 import argparse
 from typing import List
-# Imported
+# External
 import boto3
 # Internal
-from jobs.pbp import fetch_pbp
 from utils.logger import get_logger
+from utils.nfl_data_utils import fetch_pbp
 
 logger = get_logger(__name__)
 
 def main(years: List[int]):
     # Create boto3 client
     s3 = boto3.client('s3')
-
-    # Get play-by-play data for 2022
-    years = [2022]
     
     # S3 variables
     s3_bucket = os.getenv(key='S3_BUCKET')
     s3_base_key = os.getenv(key='S3_BRONZE_KEY')
 
-    # Upload to S3
     for year in years:
+        # Fetch play-by-play data
         logger.info(f"Fetching play-by-play data for {year}.")
         json_data = fetch_pbp(year)
+
+        # TODO:
+        # Check if S3 data for the year is present
+        # If file IS NOT in S3, upload it
+        # If file IS in S3, compare size 
+        # If S3 file size is smaller, replace with new data
+        # OR I could do incremental load, saving the most recent datetime
         
         s3_key = s3_base_key + f'/pbp/{str(year)}.json'
         logger.info(f"Uploading file to S3://{s3_bucket}/{s3_key}")
