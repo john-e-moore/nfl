@@ -1,3 +1,3 @@
-extraction_env/*
-transformation_env/*
-loading_env/*
+extraction/extraction_env/*
+transformation/transformation_env/*
+loading/loading_env/*
