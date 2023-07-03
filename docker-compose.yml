@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  historical_data_extraction:
+    build:
+      context: .
+      dockerfile: extraction/Dockerfile
+    command: python -m src.main --api-years api1:2010-2023,api2:2010-2023
+    volumes:
+      - ./extraction:/app
+
+  daily_data_extraction:
+    build:
+      context: .
+      dockerfile: extraction/Dockerfile
+    command: python -m src.main --api-years api1:2023,api2:2023
+    volumes:
+      - ./extraction:/app
