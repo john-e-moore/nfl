@@ -25,12 +25,12 @@ def main(years: List[int]):
         json_data = fetch_pbp(year)
 
         # TODO:
-        # Check if S3 data for the year is present
-        # If file IS NOT in S3, upload it
-        # If file IS in S3, compare size 
-        # If S3 file size is smaller, replace with new data
-        # OR I could do incremental load, saving the most recent datetime
+        # Implement incremental load
+        # Save last timestamp / date / whatever in .txt file
+        # Much more cost effective to not pull the entire file
         
+        # TODO: filename needs to have timestamp or datestamp
+        # Each load will be a separate file
         s3_key = s3_base_key + f'/pbp/{str(year)}.json'
         logger.info(f"Uploading file to S3://{s3_bucket}/{s3_key}")
         s3.put_object(
