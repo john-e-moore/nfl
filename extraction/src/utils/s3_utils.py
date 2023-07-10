@@ -3,6 +3,8 @@ import json
 from typing import Optional
 # External
 import boto3
+import pandas as pd
+from io import StringIO, BytesIO
 # Internal
 from utils.logger import get_logger
 
@@ -45,3 +47,24 @@ def write_last_update_timestamp(s3: boto3.resources.factory.s3.ServiceResource, 
             s3.put_object(Body=timestamp, Bucket=bucket, Key=key)
     except Exception as e:
         logger.info(f"Error occurred while writing last update timestamp: {e}")
+
+def write_df_to_s3(s3: boto3.resources.factory.s3.ServiceResource, df: pd.DataFrame, file_format: str, bucket: str, key: str) -> None:
+    s3 = boto3.client('s3')
+
+    if file_format == 'csv':
+        csv_buffer = StringIO()
+        df.to_csv(csv_buffer)
+        s3.put_object(Bucket=bucket, Key=key, Body=csv_buffer.getvalue())
+
+    elif file_format == 'json':
+        json_buffer = StringIO()
+        df.to_json(json_buffer, orient='records')
+        s3.put_object(Bucket=bucket, Key=key, Body=json_buffer.getvalue())
+
+    elif file_format == 'parquet':
+        parquet_buffer = BytesIO()
+        df.to_parquet(parquet_buffer, engine='pyarrow')
+        s3.put_object(Bucket=bucket, Key=key, Body=parquet_buffer.getvalue())
+
+    else:
+        raise ValueError("file_format must be 'csv', 'json', or 'parquet'")
