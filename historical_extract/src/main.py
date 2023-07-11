@@ -20,7 +20,6 @@ def main(args):
 
     # Unpack args
     years = list(args.years)
-    print(f"Years: {years}")
     file_format = args.file_format
 
     # Run extract-and-load job

@@ -1,5 +1,6 @@
 # Standard
 from typing import List
+import time
 # External
 import nfl_data_py as nfl
 # Internal
@@ -30,4 +31,6 @@ def run_job(s3, s3_bucket: str, s3_base_key: str, years: List[int], file_format:
             logger.info("File uploaded to S3://{s3_bucket}/{s3_key}")
         else:
             logger.info("dry_run set to True; skipping S3 upload.")
+
+        time.sleep(5)
         
