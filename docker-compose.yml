@@ -4,15 +4,15 @@ services:
   historical_data_extraction:
     build:
       context: .
-      dockerfile: extraction/Dockerfile
-    command: python -m src.main --api-years api1:2010-2023,api2:2010-2023
+      dockerfile: historical_extract/Dockerfile
+    command: python -m src.main
     volumes:
-      - ./extraction:/app
+      - ./historical_extract:/app
 
   daily_data_extraction:
     build:
       context: .
-      dockerfile: extraction/Dockerfile
-    command: python -m src.main --api-years api1:2023,api2:2023
+      dockerfile: daily_extract/Dockerfile
+    command: python -m src.main
     volumes:
-      - ./extraction:/app
+      - ./daily_extract:/app
