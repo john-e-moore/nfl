@@ -1,5 +1,5 @@
-historical_extract/extraction_env/*
-daily_extract/extraction_env/*
-transformation/transformation_env/*
-loading/loading_env/*
+historical_extract/venv/*
+daily_extract/venv/*
+transformation/venv/*
+loading/venv/*
 *.pyc
