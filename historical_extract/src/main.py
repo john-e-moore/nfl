@@ -6,7 +6,7 @@ from typing import List
 import boto3
 # Internal
 from utils.logger import get_logger
-from jobs.pbp import run_job
+from jobs.pbp import run_pbp_job
 
 logger = get_logger(__name__)
 
@@ -21,12 +21,14 @@ def main(args):
     # Unpack args
     years = list(args.years)
     file_format = args.file_format
+    if args.dry_run:
+        logger.info("Running dry mode -- no files will be uploaded.")
+        dry_run = True
+    else:
+        dry_run = False
 
     # Run extract-and-load job
-    if args.dry_run:
-        run_job(s3, s3_bucket, s3_base_key, years, file_format, dry_run=True)
-    else:
-        run_job(s3, s3_bucket, s3_base_key, years, file_format)
+    run_pbp_job(s3, s3_bucket, s3_base_key, years, file_format, dry_run)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Extract play-by-play data and send to S3 bronze layer.")

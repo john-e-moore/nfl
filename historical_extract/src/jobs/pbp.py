@@ -16,7 +16,7 @@ def fetch_pbp(years: List[int], format='json') -> None:
 
     return df
 
-def run_job(s3, s3_bucket: str, s3_base_key: str, years: List[int], file_format: str, dry_run=False) -> None:
+def run_pbp_job(s3, s3_bucket: str, s3_base_key: str, years: List[int], file_format: str, dry_run=False) -> None:
     """Fetches play-by-play for each year and uploads to S3"""
     for year in years:
         # Fetch play-by-play data
@@ -31,6 +31,5 @@ def run_job(s3, s3_bucket: str, s3_base_key: str, years: List[int], file_format:
             logger.info("File uploaded to S3://{s3_bucket}/{s3_key}")
         else:
             logger.info("dry_run set to True; skipping S3 upload.")
-
         time.sleep(5)
         
