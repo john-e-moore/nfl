@@ -27,4 +27,4 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Specify the command to run when the container starts
-CMD ["python", "src/main.py"]
+ENTRYPOINT ["python", "src/main.py"]
