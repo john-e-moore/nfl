@@ -1,0 +1,23 @@
+########################################
+Docker
+########################################
+
+# Build image (current directory as base)
+docker build . -t <image_tag>
+
+# Run historical extract dry run
+docker run --env-file .env nfl_historical_extract --years 2021 --file_format parquet --dry_run
+
+# View logs
+docker logs <container_id>
+
+########################################
+AWS
+########################################
+
+# Push Docker image to ECR
+aws ecr create-repository --repository-name <repo_name> --region <region_name>
+aws ecr get-login-password --region <region_name>
+aws ecr --region <region> | docker login -u AWS -p <encrypted_token> <repo_uri>
+docker tag <source_image_tag> <target_ecr_repo_uri>
+docker push <ecr-repo-uri>
