@@ -3,5 +3,4 @@ daily_extract/venv/*
 transformation/venv/*
 loading/venv/*
 *.pyc
-*.csv
 .env
