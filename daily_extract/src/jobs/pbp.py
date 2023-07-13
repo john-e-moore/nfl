@@ -35,7 +35,8 @@ def run_pbp_job(s3, s3_bucket: str, s3_key: str, years: List[int], file_format: 
             continue
 
         # Partition by week
-        for week in range(1,18):
+        # In 2022, there were 18 weeks in the season which is the highest ever
+        for week in range(1,19):
             week_df = df[df['week'] == week]
 
             if week_df.empty:
