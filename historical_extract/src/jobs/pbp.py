@@ -28,7 +28,7 @@ def run_pbp_job(s3, s3_bucket: str, s3_base_key: str, years: List[int], file_for
             s3_key = s3_base_key + f'/pbp/{str(year)}.{file_format}'
             logger.info(f"Uploading file to S3://{s3_bucket}/{s3_key}")
             write_df_to_s3(s3, df, file_format, s3_bucket, s3_key)
-            logger.info("File uploaded to S3://{s3_bucket}/{s3_key}")
+            logger.info(f"File uploaded to S3://{s3_bucket}/{s3_key}")
         else:
             logger.info("dry_run set to True; skipping S3 upload.")
         time.sleep(5)
