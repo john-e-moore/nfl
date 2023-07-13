@@ -19,8 +19,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get purge -y --auto-remove gcc python3-dev
 
 # Create and activate a virtual environment
-RUN python3 -m venv extraction_env
-ENV PATH="/app/extraction_env/bin:$PATH"
+RUN python3 -m venv venv
+ENV PATH="/app/venv/bin:$PATH"
 
 # Install python dependencies
 RUN pip install --upgrade pip
