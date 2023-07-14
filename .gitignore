@@ -1,4 +1,3 @@
-extract_and_load/venv/*
-transformation/venv/*
+*venv*
 *.pyc
 .env
