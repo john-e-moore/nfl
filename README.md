@@ -1,1 +1,1 @@
-Lakehouse ELT for NFL data using Docker, AWS Fargate, and CI/CD
+Lakehouse ELT for NFL data. Experimentation with containers and CI/CD.
