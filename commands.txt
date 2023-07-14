@@ -5,8 +5,8 @@ Docker
 # Build image (current directory as base)
 docker build . -t <image_tag>
 
-# Run historical extract dry run
-docker run --env-file .env nfl_historical_extract --data pbp --years 2021 --file_format parquet --dry_run
+# Run extract and load
+docker run --env-file .env nfl_historical_extract --data pbp --years 2020 2021 --file_format parquet
 
 # View logs
 docker logs <container_id>

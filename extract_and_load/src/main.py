@@ -30,14 +30,6 @@ def main(args):
         dry_run = False
 
     # Run extract-and-load job
-    """
-    0. Pull play-by-play data for 'year'
-    2. Loop through all possible weeks (1-17)
-    3. Check to see if nfl/bronze/pbp/{year}/{week_x}.{file_format} exists
-    4. If yes, continue
-    5. If no, partition the dataframe and write that week's data to s3
-    (no need to upload an extra file this way)
-    """
     if data == 'pbp':
         run_pbp_job(s3, s3_bucket, s3_key, years, file_format, dry_run)
     # Add more data type jobs here
@@ -47,7 +39,7 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--data', required=True, help='The type of data to be fetched. Only accepts 1 argument; run a separate container for other data types. Corresponds to the name of the .py file in jobs.')
     parser.add_argument('-y', '--years', nargs='+', required=True, default=get_current_nfl_season(), help='List of weeks to extract data for.')
     parser.add_argument('-f', '--file_format', default='json', help='File format to be uploaded to S3.')
-    parser.add_argument('--dry_run', action='store_true', help='Run the script without making changes')    # Example: python main.py -y 2020 2021 2022 -f 'parquet'
+    parser.add_argument('--dry_run', action='store_true', help='Run the script without making changes')
     args = parser.parse_args()
 
     main(args)
