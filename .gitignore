@@ -1,6 +1,4 @@
-historical_extract/venv/*
-daily_extract/venv/*
+extract_and_load/venv/*
 transformation/venv/*
-loading/venv/*
 *.pyc
 .env
