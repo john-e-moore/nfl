@@ -3,14 +3,15 @@ from typing import List
 import time
 # External
 import nfl_data_py as nfl
+import pandas as pd
 # Internal
 from utils.logger import get_logger
 from utils.s3_utils import write_df_to_s3, check_file_exists
 
 logger = get_logger(__name__)
 
-def fetch_pbp(years: List[int], format='json') -> None:
-    """Gets play-by-play data from nfl_data_py and converts to JSON."""
+def fetch_pbp(years: List[int]) -> pd.DataFrame:
+    """Gets play-by-play data from nfl_data_py."""
     
     try:
         df = nfl.import_pbp_data(years=years, downcast=True, cache=False, alt_path=None)
