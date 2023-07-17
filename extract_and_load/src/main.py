@@ -8,6 +8,7 @@ import boto3
 from utils.logger import get_logger
 from utils.time_utils import get_current_nfl_season
 from jobs.pbp import run_pbp_job
+from jobs.player_weekly import run_player_weekly_job
 
 logger = get_logger(__name__)
 
@@ -32,6 +33,8 @@ def main(args):
     # Run extract-and-load job
     if data == 'pbp':
         run_pbp_job(s3, s3_bucket, s3_key, years, file_format, dry_run)
+    if data == 'player_weekly':
+        run_player_weekly_job(s3, s3_bucket, s3_key, years, file_format, dry_run)
     # Add more data type jobs here
 
 if __name__ == "__main__":

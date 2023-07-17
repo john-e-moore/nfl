@@ -29,7 +29,7 @@ def run_pbp_job(s3, s3_bucket: str, s3_key: str, years: List[int], file_format: 
     for year in years:
         # Fetch play-by-play data
         logger.info(f"Fetching play-by-play data for {year}.")
-        df = fetch_pbp([int(year)], file_format)
+        df = fetch_pbp([int(year)])
 
         if df.empty:
             logger.info(f"No data for {year}.")
