@@ -24,11 +24,15 @@ def main(args):
     years = list(args.years)
     file_format = args.file_format
     data = args.data
+    
     if args.dry_run:
         logger.info("Running dry mode -- no files will be uploaded.")
         dry_run = True
     else:
         dry_run = False
+
+    if years == 'all':
+        years = [x for x in range(1999,2023)]
 
     # Run extract-and-load job
     if data == 'pbp':

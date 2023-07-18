@@ -25,33 +25,27 @@ def fetch_player_weekly(years: List[int]) -> pd.DataFrame:
     return df
 
 def run_player_weekly_job(s3, s3_bucket: str, s3_key: str, years: List[int], file_format: str, dry_run=False) -> None:
-    """Loops through each week in the list of years and uploads to data lake if file is not present."""
-    for year in years:
-        # Fetch weekly player data
-        logger.info(f"Fetching weekly player data for {year}.")
-        df = fetch_player_weekly([int(year)])
-
-        if df.empty:
-            logger.info(f"No data for {year}.")
-            continue
-
-        # Check if data for this week exists in S3
-        # If no, write to S3
-        s3_key_full = s3_key + f'/player_weekly/{str(year)}.{file_format}'
-        file_exists = check_file_exists(s3, s3_bucket, s3_key_full)
-
-        if not file_exists:
-            if not dry_run:
-                write_df_to_s3(s3, df, file_format, s3_bucket, s3_key_full)
-                logger.info(f"File uploaded to S3://{s3_bucket}/{s3_key_full}")
-            else:
-                logger.info("dry_run set to True; skipping S3 upload.")
-        else:
-            logger.info(f"S3://{s3_bucket}/{s3_key_full} already exists.")
+    """Gets data for all years and does full replace if file is already in S3."""
     
-        # Sleep before hitting API again
-        logger.info(f"{year} uploads complete. Sleeping for 5 seconds...")
-        time.sleep(5)
+    logger.info(f"Fetching weekly player data for {years}.")
+    df = fetch_player_weekly([int(year) for year in years])
+
+    if df.empty:
+        logger.info(f"No player weekly data found.")
+        return False
+
+    # Check if data for this week exists in S3
+    # If no, write to S3
+    s3_key_full = s3_key + f'player_weekly.{file_format}'
+
+    if not dry_run:
+        write_df_to_s3(s3, df, file_format, s3_bucket, s3_key_full)
+        logger.info(f"File uploaded to S3://{s3_bucket}/{s3_key_full}")
+    else:
+        logger.info("dry_run set to True; skipping S3 upload.")
+    
+    logger.info(f"Weekly player data upload complete.")
+    
             
             
         
