@@ -1,0 +1,6 @@
+,season,round,pick,team,gsis_id,pfr_player_id,cfb_player_id,pfr_player_name,hof,position,category,side,college,age,to,allpro,probowls,seasons_started,w_av,car_av,dr_av,games,pass_completions,pass_attempts,pass_yards,pass_tds,pass_ints,rush_atts,rush_yards,rush_tds,receptions,rec_yards,rec_tds,def_solo_tackles,def_ints,def_sacks
+10358,2022,1,1,JAX,,WalkTr03,travon-walker-1,Travon Walker,False,DE,DL,D,Georgia,21.0,2022.0,0,0,1,6.0,,6.0,15.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,24.0,1.0,3.5
+10359,2022,1,2,DET,,HutcAi00,aidan-hutchinson-1,Aidan Hutchinson,False,DE,DL,D,Michigan,22.0,2022.0,0,0,1,8.0,,8.0,17.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,34.0,3.0,9.5
+10360,2022,1,3,HOU,,StinDe00,derek-stingley-jr-1,Derek Stingley Jr.,False,CB,DB,D,LSU,21.0,2022.0,0,0,1,3.0,,3.0,9.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,35.0,1.0,1.0
+10361,2022,1,4,NYJ,,GardSa00,ahmad-gardner-1,Sauce Gardner,False,CB,DB,D,Cincinnati,22.0,2022.0,1,1,1,14.0,,14.0,17.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,51.0,2.0,
+10362,2022,1,5,NYG,,ThibKa00,kayvon-thibodeaux-1,Kayvon Thibodeaux,False,DE,DL,D,Oregon,21.0,2022.0,0,0,1,7.0,,7.0,14.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,33.0,,4.0
