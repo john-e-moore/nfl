@@ -2,3 +2,5 @@
 *.pyc
 .env
 commands.txt
+models/
+data/
