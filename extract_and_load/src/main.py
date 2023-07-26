@@ -9,6 +9,8 @@ from utils.logger import get_logger
 from utils.time_utils import get_current_nfl_season
 from jobs.pbp import run_pbp_job
 from jobs.player_weekly import run_player_weekly_job
+from jobs.pbp_win_prob import run_pbp_win_prob_job
+from jobs.pbp_win_prob import columns as pbp_win_prob_columns
 
 logger = get_logger(__name__)
 
@@ -21,9 +23,12 @@ def main(args):
     s3_key = os.getenv(key='S3_BRONZE_KEY')
 
     # Unpack args
-    years = list(args.years)
+    years = args.years
+    if years[0] == 'all':
+        years = [x for x in range(1999,2023)]
     file_format = args.file_format
     data = args.data
+    logger.info(f"Job: {data}\nYears: {years}\nFile format: {file_format}")
     
     if args.dry_run:
         logger.info("Running dry mode -- no files will be uploaded.")
@@ -31,12 +36,11 @@ def main(args):
     else:
         dry_run = False
 
-    if years == 'all':
-        years = [x for x in range(1999,2023)]
-
     # Run extract-and-load job
     if data == 'pbp':
         run_pbp_job(s3, s3_bucket, s3_key, years, file_format, dry_run)
+    if data == 'pbp_win_prob':
+        run_pbp_win_prob_job(s3, s3_bucket, s3_key, years, pbp_win_prob_columns, file_format, dry_run)
     if data == 'player_weekly':
         run_player_weekly_job(s3, s3_bucket, s3_key, years, file_format, dry_run)
     # Add more data type jobs here
@@ -44,7 +48,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Extract play-by-play data and send to S3 bronze layer.")
     parser.add_argument('-d', '--data', required=True, help='The type of data to be fetched. Only accepts 1 argument; run a separate container for other data types. Corresponds to the name of the .py file in jobs.')
-    parser.add_argument('-y', '--years', nargs='+', required=True, default=get_current_nfl_season(), help='List of weeks to extract data for.')
+    parser.add_argument('-y', '--years', nargs='+', required=True, help='List of weeks to extract data for.')
     parser.add_argument('-f', '--file_format', default='json', help='File format to be uploaded to S3.')
     parser.add_argument('--dry_run', action='store_true', help='Run the script without making changes')
     args = parser.parse_args()

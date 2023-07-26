@@ -2,6 +2,8 @@
 import json
 from typing import Optional
 # External
+import zipfile
+import shutil
 import boto3
 import pandas as pd
 from io import StringIO, BytesIO
@@ -66,5 +68,21 @@ def write_df_to_s3(s3, df: pd.DataFrame, file_format: str, bucket: str, key: str
         df.to_parquet(parquet_buffer, engine='pyarrow')
         s3.put_object(Bucket=bucket, Key=key, Body=parquet_buffer.getvalue())
 
+    elif file_format == 'zip':
+        str_buffer = BytesIO()
+        df.to_csv(str_buffer, index=False)
+        # Use BytesIO to write zip file to buffer
+        zip_buffer = BytesIO()
+        with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zip_file:
+            # The arcname parameter avoids including the full path in the zip file
+            zip_file.writestr(f'{key}.csv', str_buffer.getvalue())
+        
+        # Reset the position of the buffers
+        str_buffer.seek(0)
+        zip_buffer.seek(0)
+
+        # Upload buffer content to S3
+        s3.put_object(Bucket=bucket, Key=key, Body=zip_buffer.getvalue())
+
     else:
-        raise ValueError("file_format must be 'csv', 'json', or 'parquet'")
+        raise ValueError("file_format must be 'csv', 'json', 'parquet', or 'zip'")
