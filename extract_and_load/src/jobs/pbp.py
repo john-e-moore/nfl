@@ -7,6 +7,7 @@ import pandas as pd
 # Internal
 from utils.logger import get_logger
 from utils.s3_utils import write_df_to_s3, check_file_exists
+from utils.time_utils import get_current_nfl_season
 
 logger = get_logger(__name__)
 
@@ -34,29 +35,24 @@ def run_pbp_job(s3, s3_bucket: str, s3_key: str, years: List[int], file_format: 
         if df.empty:
             logger.info(f"No data for {year}.")
             continue
+        
+        # Check if data for this year exists in S3 if not current year
+        # If no, write to S3
+        s3_key_full = s3_key + f'/pbp/pbp_{str(year)}.{file_format}'
+        file_exists = check_file_exists(s3, s3_bucket, s3_key_full)
 
-        # Partition by week
-        # In 2022, there were 18 weeks in the season which is the highest ever
-        for week in range(1,19):
-            week_df = df[df['week'] == week]
-
-            if week_df.empty:
-                logger.info(f"No data for week {week}.")
-                continue
-            
-            # Check if data for this week exists in S3
-            # If no, write to S3
-            s3_key_full = s3_key + f'/pbp/{str(year)}/week_{str(week)}.{file_format}'
-            file_exists = check_file_exists(s3, s3_bucket, s3_key_full)
-
-            if not file_exists:
-                if not dry_run:
-                    write_df_to_s3(s3, df, file_format, s3_bucket, s3_key_full)
-                    logger.info(f"File uploaded to S3://{s3_bucket}/{s3_key_full}")
-                else:
-                    logger.info("dry_run set to True; skipping S3 upload.")
+        # If current season, replace existing file
+        is_current_season = year == get_current_nfl_season()
+        if (not file_exists) or (is_current_season):
+            if not dry_run:
+                if (is_current_season) and (file_exists):
+                    logger.info(f"Replacing file for current season {year}...")
+                write_df_to_s3(s3, df, file_format, s3_bucket, s3_key_full)
+                logger.info(f"File uploaded to S3://{s3_bucket}/{s3_key_full}")
             else:
-                logger.info(f"S3://{s3_bucket}/{s3_key_full} already exists.")
+                logger.info("dry_run set to True; skipping S3 upload.")
+        else:
+            logger.info(f"S3://{s3_bucket}/{s3_key_full} already exists.")
         
         # Sleep before hitting API again
         logger.info(f"{year} uploads complete. Sleeping for 5 seconds...")

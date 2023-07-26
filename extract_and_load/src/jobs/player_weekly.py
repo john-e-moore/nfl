@@ -36,7 +36,7 @@ def run_player_weekly_job(s3, s3_bucket: str, s3_key: str, years: List[int], fil
 
     # Check if data for this week exists in S3
     # If no, write to S3
-    s3_key_full = s3_key + f'player_weekly.{file_format}'
+    s3_key_full = s3_key + f'/player_weekly.{file_format}'
 
     if not dry_run:
         write_df_to_s3(s3, df, file_format, s3_bucket, s3_key_full)
