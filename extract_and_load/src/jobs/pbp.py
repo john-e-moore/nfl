@@ -11,26 +11,25 @@ from utils.time_utils import get_current_nfl_season
 
 logger = get_logger(__name__)
 
-def fetch_pbp(years: List[int]) -> pd.DataFrame:
+def fetch_pbp(years: List[int], retries: int) -> pd.DataFrame:
     """Gets play-by-play data from nfl_data_py."""
-    
-    try:
-        df = nfl.import_pbp_data(years=years, downcast=True, cache=False, alt_path=None)
-    except Exception as e:
-        logger.info("Exception fetching data, trying again in 10 seconds. If second try fails, program will terminate.")
-        logger.exception(e)
-        logger.info("Sleeping for 10 seconds...")
-        time.sleep(10)
-        df = nfl.import_pbp_data(years=years, downcast=True, cache=False, alt_path=None)
 
+    for retry_count in range(retries):
+        try:
+            df = nfl.import_pbp_data(years=years, downcast=True, cache=False, alt_path=None)
+        except Exception as e:
+            logger.info(f"Exception fetching data. {retries - (retry_count + 1)} retries left.")
+            logger.exception(e)
+            logger.info("Sleeping for 10 seconds...")
+            time.sleep(10)
     return df
 
-def run_pbp_job(s3, s3_bucket: str, s3_key: str, years: List[int], file_format: str, dry_run=False) -> None:
+def run_pbp_job(s3, s3_bucket: str, s3_key: str, years: List[int], retries: int, file_format: str, dry_run=False) -> None:
     """Loops through each week in the list of years and uploads to data lake if file is not present."""
     for year in years:
         # Fetch play-by-play data
         logger.info(f"Fetching play-by-play data for {year}.")
-        df = fetch_pbp([int(year)])
+        df = fetch_pbp([int(year)], retries)
 
         if df.empty:
             logger.info(f"No data for {year}.")

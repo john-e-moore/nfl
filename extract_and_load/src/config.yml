@@ -1,3 +1,4 @@
+retries: 2
 jobs:
   pbp:
     start_year: 1999

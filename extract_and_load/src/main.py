@@ -4,17 +4,25 @@ import argparse
 from typing import List
 # External
 import boto3
+import yaml
 # Internal
 from utils.logger import get_logger
-from utils.time_utils import get_current_nfl_season
 from jobs.pbp import run_pbp_job
 from jobs.player_weekly import run_player_weekly_job
-from jobs.pbp_win_prob import run_pbp_win_prob_job
-from jobs.pbp_win_prob import columns as pbp_win_prob_columns
+from jobs.player_seasonal import run_player_seasonal_job
 
 logger = get_logger(__name__)
 
 def main(args):
+    # Import config
+    with open("src/config.yml", "r") as stream:
+        try:
+            config = yaml.safe_load(stream)
+            logger.info(config)
+        except yaml.YAMLError as exception:
+            logger.info(exception)
+    retries = config['retries']
+
     # Create boto3 client
     s3 = boto3.client('s3')
     
@@ -38,11 +46,11 @@ def main(args):
 
     # Run extract-and-load job
     if data == 'pbp':
-        run_pbp_job(s3, s3_bucket, s3_key, years, file_format, dry_run)
-    if data == 'pbp_win_prob':
-        run_pbp_win_prob_job(s3, s3_bucket, s3_key, years, pbp_win_prob_columns, file_format, dry_run)
+        run_pbp_job(s3, s3_bucket, s3_key, years, retries, file_format, dry_run)
     if data == 'player_weekly':
-        run_player_weekly_job(s3, s3_bucket, s3_key, years, file_format, dry_run)
+        run_player_weekly_job(s3, s3_bucket, s3_key, years, retries, file_format, dry_run)
+    if data == 'player_seasonal':
+        run_player_seasonal_job(s3, s3_bucket, s3_key, years, retries, file_format, dry_run)
     # Add more data type jobs here
 
 if __name__ == "__main__":
