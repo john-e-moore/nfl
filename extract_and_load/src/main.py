@@ -10,15 +10,17 @@ from utils.logger import get_logger
 from jobs.pbp import run_pbp_job
 from jobs.player_weekly import run_player_weekly_job
 from jobs.player_seasonal import run_player_seasonal_job
+from jobs.rosters import run_rosters_job
+from jobs.sc_lines import run_sc_lines_job
+from jobs.win_totals import run_win_totals_job
 
 logger = get_logger(__name__)
 
 def main(args):
     # Import config
-    with open("src/config.yml", "r") as stream:
+    with open("src/config.yml", "r") as config_stream:
         try:
-            config = yaml.safe_load(stream)
-            logger.info(config)
+            config = yaml.safe_load(config_stream)
         except yaml.YAMLError as exception:
             logger.info(exception)
     retries = config['retries']
@@ -51,6 +53,12 @@ def main(args):
         run_player_weekly_job(s3, s3_bucket, s3_key, years, retries, file_format, dry_run)
     if data == 'player_seasonal':
         run_player_seasonal_job(s3, s3_bucket, s3_key, years, retries, file_format, dry_run)
+    if data == 'rosters':
+        run_rosters_job(s3, s3_bucket, s3_key, years, retries, file_format, dry_run)
+    if data == 'sc_lines':
+        run_sc_lines_job(s3, s3_bucket, s3_key, years, retries, file_format, dry_run)
+    if data == 'win_totals':
+        run_win_totals_job(s3, s3_bucket, s3_key, years, retries, file_format, dry_run)
     # Add more data type jobs here
 
 if __name__ == "__main__":
