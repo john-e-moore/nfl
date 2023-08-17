@@ -31,15 +31,17 @@ with open('/home/jmlaptop/nfl/data/weekly_cols.txt', 'w') as f:
         f.write(f'({i}) {col}\n')
 
 time.sleep(5)
-
-df = nfl.import_weekly_data([2022]).head()
+"""
+years = [x for x in range(1999, 2023)]
+df = nfl.import_weekly_data([2022])
+df = df[df['position'] == 'QB']
 print(df.head())
 print(df.tail())
 print(df.dtypes)
 
-df.to_csv('/home/jmlaptop/nfl/data/weekly_sample.csv')
-"""
+df.to_csv('/home/jmlaptop/nfl/data/qb_weekly_2018_2022.csv')
 
+"""
 ########################################
 # Seasonal data
 ########################################
@@ -102,3 +104,4 @@ time.sleep(5)
 df = nfl.import_ids().head()
 df.to_csv('/home/jmlaptop/nfl/data/player_ids_sample.csv')
 time.sleep(5)
+"""
