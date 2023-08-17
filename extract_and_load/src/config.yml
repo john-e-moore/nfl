@@ -1,5 +1,19 @@
-retries: 2
 jobs:
+  retries: 2
   pbp:
     start_year: 1999
     end_year: 2022
+scrapers:
+  sleep_secs_range: [3, 10]
+  chromedriver_location: /usr/bin/chromedriver
+  urls:
+    player_props:
+      draftkings:
+        rec: https://sportsbook.draftkings.com/leagues/football/nfl?category=player-stats&subcategory=receptions
+        rec_yds: https://sportsbook.draftkings.com/leagues/football/nfl?category=player-stats&subcategory=rec-yards
+        rec_tds: https://sportsbook.draftkings.com/leagues/football/nfl?category=player-stats&subcategory=rec-tds
+        rush_yds: https://sportsbook.draftkings.com/leagues/football/nfl?category=player-stats&subcategory=rush-yards
+        rush_tds: https://sportsbook.draftkings.com/leagues/football/nfl?category=player-stats&subcategory=rush-tds
+        pass_yds: https://sportsbook.draftkings.com/leagues/football/nfl?category=player-stats&subcategory=pass-yards
+        pass_tds: https://sportsbook.draftkings.com/leagues/football/nfl?category=player-stats&subcategory=pass-tds
+        pass_ints: https://sportsbook.draftkings.com/leagues/football/nfl?category=player-stats&subcategory=qb-ints
