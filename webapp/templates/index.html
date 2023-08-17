@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <form action="/" method="post">
+        <!-- Add input fields for your features here -->
+        <input type="text" name="feature1">
+        <input type="text" name="feature2">
+        <!-- More input fields as necessary -->
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction %}
+    <h1>Prediction Result:</h1>
+    <p>{{ prediction }}</p>
+    {% endif %}
+</body>
+</html>
